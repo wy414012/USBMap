@@ -761,14 +761,14 @@ class USBMap:
             temp_h = index+1+extras+pad+(1 if last_list else 0)
             h = temp_h if temp_h > 24 else 24
             self.u.resize(last_w, h)
-            print("Press Q then [enter] to stop")
+            print("输入 Q[回车确认] 停止")
             if last_list:
-                print("Press N then [enter] to nickname port{} {}".format(
+                print("输入N 按回车【输入自定义名称】{} {}".format(
                     "" if len(last_list)==1 else "s",
                     ", ".join([str(x[0]) for x in last_list])
                 ))
             print("")
-            out = self.u.grab("Waiting {:,} second{}:  ".format(self.discover_wait,"" if self.discover_wait == 1 else "s"), timeout=self.discover_wait)
+            out = self.u.grab("等待 {:,} second{}:  ".format(self.discover_wait,"" if self.discover_wait == 1 else "s"), timeout=self.discover_wait)
             if not out or not len(out):
                 continue
             if out.lower() == "q":
@@ -810,15 +810,15 @@ class USBMap:
         self.u.resize(80, h)
         while True:
             # Display all the ports we intend to rename
-            self.u.head("Port Nickname")
+            self.u.head("端口名称")
             print("")
-            print("Current Port Numbers, Names, Nicknames and Devices:\n")
+            print("当前端口号，名称，昵称和设备:\n")
             print(name_text)
             print("")
-            print("C. Clear Custom Names")
-            print("Q. Return to Discovery")
+            print("C. 清除自定义名称")
+            print("Q. 回到扫描端口")
             print("")
-            menu = self.u.grab("Please type a nickname for port{} {}:  ".format(
+            menu = self.u.grab("请输入端口的名称{} {}:  ".format(
                 "" if len(port_list)==1 else "s",
                 ", ".join([str(x[0]) for x in port_list])
             ))
@@ -1264,23 +1264,23 @@ DefinitionBlock ("", "SSDT", 2, "CORP", "RHBReset", 0x00001000)
      * End copying here if you're adding this info to an SSDT-USB-Reset!
      */
 }"""
-        print("Saving to SSDT-RHUB-Reset.dsl...")
+        print("保存到SSDT-RHUB-RESET.DSL...")
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
         if not os.path.exists(self.output): os.mkdir(self.output)
         with open(self.rsdt_path,"w") as f:
             f.write(ssdt)
         self.re.reveal(self.rsdt_path,True)
         print("")
-        print("Done.")
+        print("完毕。")
         print("")
-        self.u.grab("Press [enter] to return to the menu...")
+        self.u.grab("按[ENTER]返回菜单...")
 
     def main(self):
         self.u.resize(80, 24)
-        self.u.head("USBMap")
+        self.u.head("USB驱动定制")
         print("")
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
-        print("Current Controllers:")
+        print("当前USB控制器:")
         print("")
         needs_rename = []
         rhub_paths   = []
