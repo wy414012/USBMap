@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import os, sys, re, json, binascii, shutil
 from Scripts import run, utils, ioreg, plist, reveal
 from collections import OrderedDict
