@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# encoding: utf-8
 
 # Get the curent directory, the script name
 # and the script name with "py" substituted for the extension.

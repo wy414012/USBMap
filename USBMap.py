@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import os, sys, re, json, binascii, shutil
 from Scripts import run, utils, ioreg, plist, reveal
 from collections import OrderedDict
@@ -6,14 +8,14 @@ from datetime import datetime
 class USBMap:
     def __init__(self):
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
-        self.u = utils.Utils("USBMap")
+        self.u = utils.Utils("USB定制工具")
         # Verify running os
         if not sys.platform.lower() == "darwin":
             self.u.head("Wrong OS!")
             print("")
-            print("USBMap can only be run on macOS!")
+            print("USBMap 只能在 macOS 上运行！")
             print("")
-            self.u.grab("Press [enter] to exit...")
+            self.u.grab("按[回车]退出...")
             exit()
         self.r = run.Run()
         self.i = ioreg.IOReg()
@@ -1028,33 +1030,33 @@ class USBMap:
                 ))
             print(", ".join(pop_list))
             print("")
-            print("K. Build USBMap.kext (Catalina And Newer)")
-            print("   - AppleUSBHostMergeProperties, MinKernel=19.0.0")
-            print("L. Build USBMapLegacy.kext (Mojave And Older)")
-            print("   - AppleUSBMergeNub, MaxKernel=18.9.9")
-            print("B. Build Both USBMap.kext and USBMapLegacy.kext")
-            print("A. Select All")
-            print("N. Select None")
-            print("P. Enable All Populated Ports")
-            print("D. Disable All Empty Ports")
-            print("C. Clear Detected Items")
-            print("T. Show Types")
+            print("K. 构建 USBMap.kext（Catalina10.15 及更新版本）")
+            print("   - AppleUSBHostMergeProperties, 最小内核支持=19.0.0")
+            print("L. 构建 USBMapLegacy.kext（Mojave 10.14 及更早版本）")
+            print("   - AppleUSBMergeNub, 最大内核支持=18.9.9")
+            print("B. 构建 USBMap.kext 和 USBMapLegacy.kext")
+            print("A. 全 选")
+            print("N. 选择 无")
+            print("P. 启用所有填充端口")
+            print("D. 禁用所有空端口")
+            print("C. 清除检测到的项目")
+            print("T. 显示类型")
             if path_match:
                 print("H. Use IOParentMatch (Currently IOPathMatch)")
             else:
                 print("H. Use IOPathMatch (Currently IOParentMatch)")
             print("")
-            print("M. Main Menu")
-            print("Q. Quit")
+            print("M. 主菜单")
+            print("Q. 退出")
             print("")
-            print("- Select ports to toggle with comma-delimited lists (eg. 1,2,3,4,5)")
-            print("- Set a range of ports using this formula R:1-15:On/Off")
-            print("- Change types using this formula T:1,2,3,4,5:t where t is the type")
-            print("- Set custom names using this formula C:1,2:Name - Name = None to clear")
+            print("- 选择端口以用逗号分隔的列表进行切换（例如 1,2,3,4,5）")
+            print("- 使用此公式设置端口范围 R:1-15:On/Off")
+            print("- 使用此公式更改类型 T:1,2,3,4,5:t 其中 t 是类型")
+            print("- 使用此公式设置自定义名称 C:1,2:Name - Name = None 清除")
             temp_h = index+1+extras+pad
             h = temp_h if temp_h > 24 else 24
             self.u.resize(last_w, h)
-            menu = self.u.grab("Please make your selection:  ")
+            menu = self.u.grab("请做出您的选择:  ")
             if not len(menu):
                 continue
             elif menu.lower() == "q":
@@ -1149,7 +1151,7 @@ class USBMap:
     def generate_renames(self, cont_list):
         used_names = [x for x in self.illegal_names]
         used_names.extend([self.connected_controllers[x]["parent_name"].upper() for x in self.connected_controllers if self.connected_controllers[x].get("parent_name",None)])
-        self.u.head("Rename Conflicting Controllers")
+        self.u.head("重命名冲突的控制器")
         print("")
         oc_patches = {"ACPI":{"Patch":[]}}
         clover_patches = {"ACPI":{"DSDT":{"Patches":[]}}}
@@ -1159,12 +1161,12 @@ class USBMap:
             print("Checking {}...".format(cont))
             c_type = self.connected_controllers[cont]["type"]
             if "XHCI" in c_type:
-                print(" - XHCI device")
+                print(" - XHCI 设备")
             elif "EHCI" in c_type:
-                print(" - EHCI device")
+                print(" - XHCI 设备")
                 con_type = "EH01"
-            else: print(" - Unknown type - using XHCI")
-            print(" - Gathering unique name...")
+            else: print(" - 未知类型 - 使用 XHCI")
+            print(" - 收集独特的名字...")
             # Now we have the base - let's increment!
             starting_number = 1 if con_type == "EH01" else 2
             while True:
@@ -1417,33 +1419,33 @@ DefinitionBlock ("", "SSDT", 2, "CORP", "RHBReset", 0x00001000)
                     rhub_paths.append(rhub_path)
                     print("  \\-> {}RHUB{} @ {}".format(self.bs,self.ce,rhub_path))
         print("")
-        print("{}D. Discover Ports{}{}".format(
+        print("{}D. 发现端口{}{}".format(
             self.rs if needs_rename else "",
             " (Will Ignore Invalid Controllers)" if needs_rename else "",
             self.ce
         ))
-        print("{}P. Edit & Create USBMap.kext{}{}".format(
+        print("{}P. 编辑和创建 USBMap.kext{}{}".format(
             "" if self.merged_list else self.rs,
             "" if self.merged_list else " (Must Discover Ports First)",
             self.ce
         ))
-        print("{}K. Create USBMapDummy.kext{}{}".format(
+        print("{}K. 创建 USBMapDummy.kext{}{}".format(
             "" if self.merged_list else self.rs,
             "" if self.merged_list else " (Must Discover Ports First)",
             self.ce
         ))
-        print("R. Reset All Detected Ports")
+        print("R. 重置所有检测到的端口")
         if os.path.exists(self.usb_list):
-            print("B. Backup Detected Port Plist")
+            print("B. 备份检测到的端口列表")
         if needs_rename:
-            print("A. Generate ACPI Renames For Conflicting Controllers")
-            print("L. Generate Plist Renames For Conflicting Controllers")
+            print("A. 为冲突的控制器生成 ACPI 重命名")
+            print("L. 为冲突的控制器生成 Plist 重命名")
         if rhub_paths:
-            print("H. Generate ACPI To Reset RHUBs ({}May Conflict With Existing SSDT-USB-Reset.aml!{})".format(self.rs,self.ce))
+            print("H. 生成 ACPI 以重置 RHUB ({}可能与现有的 SSDT-USB-Reset.aml 冲突！{})".format(self.rs,self.ce))
         print("")
-        print("Q. Quit")
+        print("Q. 退出")
         print("")
-        menu = self.u.grab("Please select an option:  ")
+        menu = self.u.grab("请选择一个选项:  ")
         if not len(menu):
             return
         if menu.lower() == "q":
@@ -1468,12 +1470,12 @@ DefinitionBlock ("", "SSDT", 2, "CORP", "RHBReset", 0x00001000)
             if os.path.exists(output): self.re.reveal(output,True)
         elif menu.lower() == "d":
             if not len(self.controllers):
-                self.u.head("No Valid Controllers")
+                self.u.head("没有有效的控制器")
                 print("")
-                print("No valid controllers found for port discovery!")
-                print("You may need plist/ACPI renames in order to discover.")
+                print("找不到用于端口发现的有效控制器！")
+                print("您可能需要 plist/ACPI 重命名才能发现")
                 print("")
-                return self.u.grab("Press [enter] to return...")
+                return self.u.grab("按[回车]返回...")
             self.discover_ports()
         elif menu.lower() == "p" and self.merged_list:
             self.edit_plist()

@@ -1,4 +1,9 @@
+
 import os, sys, re, json, binascii, shutil, subprocess
+
+# encoding: utf-8
+
+
 from Scripts import run, utils, ioreg, plist, reveal
 from collections import OrderedDict
 from datetime import datetime
